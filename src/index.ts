@@ -1,15 +1,18 @@
-import { eq } from 'drizzle-orm';
-import 'dotenv/config';
+import express from 'express';
 
-import { db } from '../db';
-import * as schema from '../db/schema';
+import usersRouter from '../db/routes/users.routes';
+import exercisesRouter from '../db/routes/exercises.routes';
 
-const queryTable = async () => {
-  const res = await db
-    .select()
-    .from(schema.exercises)
-    .where(eq(schema.exercises.created_by, 1));
-  console.log(res);
-};
+const app = express();
+const PORT = 8008;
 
-queryTable();
+app.use(express.json());
+
+app.use('/users', usersRouter);
+app.use('/exercises', exercisesRouter);
+
+app.get('/', (_, res) => {
+  res.send('Try /users');
+});
+
+app.listen(PORT, () => console.log('App has started on port', PORT));
