@@ -1,5 +1,5 @@
 import express from 'express';
-import { eq } from 'drizzle-orm';
+import { eq, getTableColumns } from 'drizzle-orm';
 
 import { db } from '../index';
 import * as schema from '../schema';
@@ -48,7 +48,7 @@ router.post('/:id/sets', async (req, res) => {
   try {
     const set = await db
       .insert(schema.sets)
-      .values({ reps: repsNum, weight: weightNum, exerciseId: Number(id) })
+      .values({ reps: repsNum, weight: weightNum, exercise_id: Number(id) })
       .returning();
     return res.status(201).send(set);
   } catch (err) {
@@ -97,6 +97,7 @@ router.delete('/:id/sets/:setId', async (req, res) => {
 // View single exercise
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
+  const { exercise_id, ...setsCols } = getTableColumns(schema.sets);
 
   const idNum = Number.parseInt(id, 10);
 
@@ -117,9 +118,9 @@ router.get('/:id', async (req, res) => {
     }
 
     const sets = await db
-      .select()
+      .select(setsCols)
       .from(schema.sets)
-      .where(eq(schema.sets.exerciseId, idNum));
+      .where(eq(schema.sets.exercise_id, idNum));
 
     const exerciseDetails = {
       ...exercise,
@@ -139,7 +140,7 @@ router.delete('/:id', async (req, res) => {
     try {
       await db
         .delete(schema.sets)
-        .where(eq(schema.sets.exerciseId, Number(id)))
+        .where(eq(schema.sets.exercise_id, Number(id)))
         .returning();
       await db
         .delete(schema.exercises)

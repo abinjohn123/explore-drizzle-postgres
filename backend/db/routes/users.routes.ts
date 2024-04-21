@@ -1,5 +1,5 @@
 import express from 'express';
-import { eq } from 'drizzle-orm';
+import { eq, getTableColumns } from 'drizzle-orm';
 
 import { db } from '../index';
 import * as schema from '../schema';
@@ -71,9 +71,11 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id/exercises', async (req, res) => {
   const { id } = req.params;
 
+  const { created_by, ...rest } = getTableColumns(schema.exercises);
+
   try {
     const exercises = await db
-      .select()
+      .select(rest)
       .from(schema.exercises)
       .where(eq(schema.exercises.created_by, id as unknown as number));
     return res.status(200).send(exercises);

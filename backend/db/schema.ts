@@ -60,7 +60,7 @@ export const exercises = pgTable('exercises', {
 export const sets = pgTable('sets', {
   id: serial('id').primaryKey(),
   created_at: timestamp('created_at'),
-  exerciseId: integer('exercise_id').references(() => exercises.id),
+  exercise_id: integer('exercise_id').references(() => exercises.id),
   reps: integer('reps'),
   weight: integer('weight'),
 });
