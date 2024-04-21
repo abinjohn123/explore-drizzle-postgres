@@ -56,3 +56,11 @@ export const exercises = pgTable('exercises', {
   name: varchar('name', { length: 256 }),
   type: exerciseTypeEnum('type'),
 });
+
+export const sets = pgTable('sets', {
+  id: serial('id').primaryKey(),
+  created_at: timestamp('created_at'),
+  exerciseId: integer('exercise_id').references(() => exercises.id),
+  reps: integer('reps'),
+  weight: integer('weight'),
+});
