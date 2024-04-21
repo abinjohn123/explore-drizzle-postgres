@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@types/recharts": "^1.8.29",
+    "clsx": "^2.1.0",
+    "react-aria-components": "^1.1.1",
+    "recharts": "^2.12.6"
+  }
+}
