@@ -94,6 +94,43 @@ router.delete('/:id/sets/:setId', async (req, res) => {
   }
 });
 
+// View single exercise
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const idNum = Number.parseInt(id, 10);
+
+  if (isNaN(idNum)) {
+    res.status(400).send('id must be a number');
+    return;
+  }
+
+  try {
+    const [exercise] = await db
+      .select()
+      .from(schema.exercises)
+      .where(eq(schema.exercises.id, idNum));
+
+    if (!exercise) {
+      res.status(404).send('Exercise not found');
+      return;
+    }
+
+    const sets = await db
+      .select()
+      .from(schema.sets)
+      .where(eq(schema.sets.exerciseId, idNum));
+
+    const exerciseDetails = {
+      ...exercise,
+      sets,
+    };
+    return res.status(200).send(exerciseDetails);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
 // Delete an exercise
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;

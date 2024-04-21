@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 
 import usersRouter from '../db/routes/users.routes';
 import exercisesRouter from '../db/routes/exercises.routes';
@@ -7,6 +8,7 @@ const app = express();
 const PORT = 8008;
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/users', usersRouter);
 app.use('/exercises', exercisesRouter);
