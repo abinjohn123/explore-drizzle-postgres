@@ -22,6 +22,7 @@ import clsx from 'clsx';
 
 import customSWR from './api';
 import { Exercise } from './types';
+import Header from './components/Header';
 
 const USER_ID = 2;
 
@@ -63,16 +64,7 @@ const CHART_DATA = [
 function App() {
   return (
     <div className="flex flex-col gap-4">
-      <header className="flex flex-row items-center gap-4">
-        <button>
-          <span className="material-symbols-rounded text-2xl text-slate-100 flex items-center size-6">
-            arrow_back
-          </span>
-        </button>
-        <h1 className="text-3xl font-semibold truncate text-slate-300">
-          Bench Press
-        </h1>
-      </header>
+      <Header title="Bench Press" />
       <div className="relative">
         <p className="text-slate-300 text-sm absolute right-4 bottom-12">
           Last 30 days' progress
