@@ -20,7 +20,7 @@ import {
 } from 'react-aria-components';
 import clsx from 'clsx';
 
-import customSWR from './api';
+import useCustomSWR from './api';
 import { Exercise } from './types';
 import Header from './components/Header';
 
