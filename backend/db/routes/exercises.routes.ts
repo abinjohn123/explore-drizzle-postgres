@@ -1,5 +1,5 @@
 import express from 'express';
-import { eq, getTableColumns } from 'drizzle-orm';
+import { and, desc, eq, getTableColumns, gt } from 'drizzle-orm';
 
 import { db } from '../index';
 import * as schema from '../schema';
@@ -100,6 +100,8 @@ router.get('/:id', async (req, res) => {
   const { exercise_id, ...setsCols } = getTableColumns(schema.sets);
 
   const idNum = Number.parseInt(id, 10);
+  const today = new Date();
+  const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
 
   if (isNaN(idNum)) {
     res.status(400).send('id must be a number');
@@ -120,7 +122,13 @@ router.get('/:id', async (req, res) => {
     const sets = await db
       .select(setsCols)
       .from(schema.sets)
-      .where(eq(schema.sets.exercise_id, idNum));
+      .where(
+        and(
+          eq(schema.sets.exercise_id, idNum),
+          gt(schema.sets.created_at, thirtyDaysAgo)
+        )
+      )
+      .orderBy(desc(schema.sets.created_at));
 
     const exerciseDetails = {
       ...exercise,
