@@ -6,6 +6,7 @@ import exercisesRouter from '../db/routes/exercises.routes';
 
 const app = express();
 const PORT = 8008;
+const IP = '192.168.1.3';
 
 app.use(express.json());
 app.use(cors());
@@ -17,4 +18,4 @@ app.get('/', (_, res) => {
   res.send('Try /users');
 });
 
-app.listen(PORT, () => console.log('App has started on port', PORT));
+app.listen(PORT, IP, () => console.log('App has started on', `${IP}:${PORT}`));
