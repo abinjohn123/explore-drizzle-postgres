@@ -6,6 +6,8 @@ import App from './App.tsx';
 import './index.css';
 import LogWorkout from './pages/log-workout/index.tsx';
 
+export const TEST_USER_ID = 4;
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -19,8 +21,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <div className="max-w-md bg-slate-50 min-h-screen mx-auto p-4">
+    <div className="mx-auto h-screen max-w-md bg-slate-50 p-4">
       <RouterProvider router={router} />
     </div>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

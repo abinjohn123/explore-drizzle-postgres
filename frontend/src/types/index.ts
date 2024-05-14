@@ -1,7 +1,4 @@
-export enum ExerciseTypes {
-  Strength,
-  Cardio,
-}
+export type ExerciseTypes = 'Cardio' | 'Strength';
 
 export type Exercise = {
   id: number;
