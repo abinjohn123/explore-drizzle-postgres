@@ -1,11 +1,7 @@
 import useSWR from 'swr';
+import { CustomError } from '@/types';
 
-interface CustomError extends Error {
-  info?: any;
-  status?: number;
-}
-
-const BASE_URL = 'http://192.168.1.3:8008';
+const BASE_URL = 'http://192.168.1.6:8008';
 
 export const customFetch = async <T>(...args: Parameters<typeof fetch>) => {
   const [route, rest] = args;
@@ -18,9 +14,9 @@ export const customFetch = async <T>(...args: Parameters<typeof fetch>) => {
 
   if (!response.ok) {
     const error: CustomError = new Error(
-      'An error occured while fetching data'
+      'An error occured while fetching data',
     );
-    error.info = response.json();
+    error.info = await response.json();
     error.status = response.status;
     throw error;
   }
