@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   title: string;
+  children?: React.ReactNode;
   sticky?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, sticky = false }) => {
+const Header: React.FC<HeaderProps> = ({ title, children, sticky = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -14,14 +15,14 @@ const Header: React.FC<HeaderProps> = ({ title, sticky = false }) => {
 
   const BackButton = (
     <button onClick={() => navigate(-1)} className="flex items-center">
-      <span className="material-symbols-rounded text-2xl text-slate-800 leading-none size-6">
+      <span className="material-symbols-rounded size-6 text-2xl leading-none text-slate-800">
         arrow_back
       </span>
     </button>
   );
 
   const Title = (
-    <h1 className="text-2xl font-semibold truncate text-slate-800 leading-normal">
+    <h1 className="truncate text-2xl font-semibold leading-normal text-slate-800">
       {title}
     </h1>
   );
@@ -34,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({ title, sticky = false }) => {
     >
       {!isRootRoute && BackButton}
       {Title}
+      {children}
     </header>
   );
 };
