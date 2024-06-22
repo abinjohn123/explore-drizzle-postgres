@@ -48,7 +48,7 @@ router.post('/:id/sets', async (req, res) => {
   try {
     const set = await db
       .insert(schema.sets)
-      .values({ reps: repsNum, weight: weightNum, exercise_id: Number(id) })
+      .values({ reps: repsNum, weight: weightNum, workout_id: Number(id) })
       .returning();
     return res.status(201).send(set);
   } catch (err) {
@@ -97,7 +97,7 @@ router.delete('/:id/sets/:setId', async (req, res) => {
 // View single exercise
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const { exercise_id, ...setsCols } = getTableColumns(schema.sets);
+  const { workout_id, ...setsCols } = getTableColumns(schema.sets);
 
   const idNum = Number.parseInt(id, 10);
   const today = new Date();
@@ -124,7 +124,7 @@ router.get('/:id', async (req, res) => {
       .from(schema.sets)
       .where(
         and(
-          eq(schema.sets.exercise_id, idNum),
+          eq(schema.sets.workout_id, idNum),
           gt(schema.sets.created_at, thirtyDaysAgo)
         )
       )
@@ -148,7 +148,7 @@ router.delete('/:id', async (req, res) => {
     try {
       await db
         .delete(schema.sets)
-        .where(eq(schema.sets.exercise_id, Number(id)))
+        .where(eq(schema.sets.workout_id, Number(id)))
         .returning();
       await db
         .delete(schema.exercises)

@@ -52,15 +52,22 @@ export const users = pgTable('users', {
 export const exercises = pgTable('exercises', {
   id: serial('id').primaryKey(),
   created_at: timestamp('created_at'),
-  created_by: serial('created_by').references(() => users.id),
+  created_by: integer('created_by').references(() => users.id),
   name: varchar('name', { length: 256 }),
   type: exerciseTypeEnum('type'),
+});
+
+export const workouts = pgTable('workouts', {
+  workout_id: serial('workout_id').primaryKey(),
+  created_at: timestamp('created_at'),
+  created_by: integer('created_by').references(() => users.id),
+  exercise_id: integer('exercise_id').references(() => exercises.id),
 });
 
 export const sets = pgTable('sets', {
   id: serial('id').primaryKey(),
   created_at: timestamp('created_at'),
-  exercise_id: integer('exercise_id').references(() => exercises.id),
+  workout_id: integer('workout_id').references(() => workouts.workout_id),
   reps: integer('reps'),
   weight: integer('weight'),
 });
