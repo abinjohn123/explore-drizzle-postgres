@@ -8,6 +8,7 @@ import Home from './Home.tsx';
 import './index.css';
 import LogWorkout from './pages/log-workout/index.tsx';
 import App from './App.tsx';
+import GlobalError from './components/GlobalError.tsx';
 
 export const TEST_USER_ID = 4;
 
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
         element: <LogWorkout />,
       },
     ],
+    errorElement: <GlobalError />,
   },
 ]);
 
