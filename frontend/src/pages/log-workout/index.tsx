@@ -21,6 +21,7 @@ import useCustomSWR, { customFetch } from '../../api';
 import AddExercise from './AddExercise';
 import { TEST_USER_ID } from '@/main';
 import { useToast } from '@/components/ui/use-toast';
+import DatePill from '@/components/DatePill';
 
 type FormFields = {
   exercise_id: number;
@@ -154,13 +155,7 @@ const LogWorkout = () => {
   return (
     <>
       <Header title="Log Workout">
-        <span className="ml-auto rounded-lg border border-solid border-slate-300 bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-500">
-          {new Intl.DateTimeFormat('en-US', {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
-          }).format(new Date())}
-        </span>
+        <DatePill />
       </Header>
       <form
         onSubmit={handleSubmit(onSubmit)}
