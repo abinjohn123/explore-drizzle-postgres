@@ -9,20 +9,21 @@ import './index.css';
 import LogWorkout from './pages/log-workout/index.tsx';
 import App from './App.tsx';
 import GlobalError from './components/GlobalError.tsx';
+import { ROUTES } from './routes/index.ts';
 
 export const TEST_USER_ID = 4;
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTES.HOME,
     element: <App />,
     children: [
       {
-        path: '/',
+        path: ROUTES.HOME,
         element: <Home />,
       },
       {
-        path: '/log-workout',
+        path: ROUTES.NEW_WORKOUT,
         element: <LogWorkout />,
       },
     ],
