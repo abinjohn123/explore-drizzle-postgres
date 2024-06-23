@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const AppNav: React.FC = () => {
   return (
-    <nav className="-mx-4 mt-auto flex items-center justify-between gap-6 border-t border-solid border-slate-200 px-6 pt-4">
+    <nav className="-mx-4 inline-flex items-center justify-between gap-6 border-t border-solid border-slate-200 px-6 pt-4">
       <NavLink to="/">
         <span className="material-symbols-rounded text-3xl leading-none text-slate-800">
           home

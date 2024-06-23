@@ -77,7 +77,8 @@ router.get('/:id/exercises', async (req, res) => {
     const exercises = await db
       .select(rest)
       .from(schema.exercises)
-      .where(eq(schema.exercises.created_by, id as unknown as number));
+      .where(eq(schema.exercises.created_by, id as unknown as number))
+      .orderBy(schema.exercises.name);
     return res.status(200).send(exercises);
   } catch (err) {
     return res.status(400).send(err);

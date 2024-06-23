@@ -1,5 +1,5 @@
 import express from 'express';
-import { and, desc, eq, getTableColumns, gt } from 'drizzle-orm';
+import { and, asc, desc, eq, getTableColumns, gt } from 'drizzle-orm';
 
 import { db } from '../index';
 import * as schema from '../schema';
@@ -8,7 +8,10 @@ const router = express.Router();
 
 // All exercises
 router.get('/', async (_, res) => {
-  const exercises = await db.select().from(schema.exercises);
+  const exercises = await db
+    .select()
+    .from(schema.exercises)
+    .orderBy(schema.exercises.name);
   res.status(200).send(exercises);
 });
 

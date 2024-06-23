@@ -10,6 +10,7 @@ import LogWorkout from './pages/log-workout/index.tsx';
 import App from './App.tsx';
 import GlobalError from './components/GlobalError.tsx';
 import { ROUTES } from './routes/index.ts';
+import Exercises from './pages/exercises/index.tsx';
 
 export const TEST_USER_ID = 4;
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.NEW_WORKOUT,
         element: <LogWorkout />,
+      },
+      {
+        path: ROUTES.EXERCISES,
+        element: <Exercises />,
       },
     ],
     errorElement: <GlobalError />,

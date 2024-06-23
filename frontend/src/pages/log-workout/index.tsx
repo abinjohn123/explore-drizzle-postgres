@@ -159,7 +159,7 @@ const LogWorkout = () => {
       </Header>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-4 flex flex-col gap-4"
+        className="mt-4 flex grow flex-col gap-4"
       >
         <label className="flex flex-col gap-0.5">
           <span className="text-xs font-semibold text-slate-500">Name</span>
