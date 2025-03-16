@@ -6,6 +6,7 @@ import {
   Controller,
   UseFormRegister,
   FieldErrors,
+  useFieldArray,
 } from 'react-hook-form';
 import {
   Combobox,
@@ -26,8 +27,8 @@ import DatePill from '@/components/DatePill';
 type FormFields = {
   exercise_id: number;
   sets: {
-    reps: number;
-    weight: number;
+    reps?: number;
+    weight?: number;
   }[];
 };
 
@@ -35,6 +36,8 @@ interface SetInputProps {
   index: number;
   register: UseFormRegister<FormFields>;
   errors: FieldErrors<FormFields>;
+  onRemove: () => void;
+  showRemoveButton: boolean;
 }
 
 const NoExercisesAdded = () => (
@@ -50,13 +53,20 @@ const NoExercisesAdded = () => (
   </div>
 );
 
-const SetInput: React.FC<SetInputProps> = ({ index, register, errors }) => {
+const SetInput: React.FC<SetInputProps> = ({ 
+  index, 
+  register, 
+  errors, 
+  onRemove,
+  showRemoveButton
+}) => {
   return (
     <fieldset className="flex items-center justify-between gap-2">
       <label className="flex flex-col gap-0.5">
         <span className="text-xs font-semibold text-slate-500">Reps</span>
         <input
           type="number"
+          min={0}
           className={clsx(
             'w-full rounded-md border p-2  text-base font-normal text-slate-600',
             errors.sets && errors.sets[index]?.reps
@@ -66,15 +76,18 @@ const SetInput: React.FC<SetInputProps> = ({ index, register, errors }) => {
           {...register(`sets.${index}.reps`, { required: true })}
         />
       </label>
+
       <span className="mt-4 shrink-0 text-xs font-semibold text-slate-400">
         — {index + 1} —
       </span>
+
       <label className="flex flex-col gap-0.5">
         <span className="text-xs font-semibold text-slate-500">
           Weight (Kg)
         </span>
         <input
           type="number"
+          min={0}
           className={clsx(
             'w-full rounded-md border p-2  text-base font-normal text-slate-600',
             errors.sets && errors.sets[index]?.weight
@@ -85,12 +98,17 @@ const SetInput: React.FC<SetInputProps> = ({ index, register, errors }) => {
         />
       </label>
 
-      {/**@todo - dynamic sets */}
-      {/* <button className="leading-none mt-4">
-        <span className="material-symbols-rounded leading-none text-xl text-slate-500">
-          delete
-        </span>
-      </button> */}
+      {showRemoveButton && (
+        <button 
+          type="button" 
+          className="mt-4 leading-none active:bg-slate-300 p-1.5 rounded-full flex items-center justify-center"
+          onClick={onRemove}
+        >
+          <span className="material-symbols-rounded leading-none text-xl text-slate-500">
+            delete
+          </span>
+        </button>
+      )}
     </fieldset>
   );
 };
@@ -103,9 +121,24 @@ const LogWorkout = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<FormFields>();
+  } = useForm<FormFields>({
+    defaultValues: {
+      sets: [
+        { reps: undefined, weight: undefined },
+        { reps: undefined, weight: undefined },
+        { reps: undefined, weight: undefined },
+      ]
+    }
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sets"
+  });
+
+
   const { data, isLoading, mutate } =
-    useCustomSWR<Exercise[]>('/users/4/exercises');
+    useCustomSWR<Exercise[]>(`/users/${TEST_USER_ID}/exercises`);
   const { toast } = useToast();
 
   const [exercise, setExercise] = useState<Exercise | null>(null);
@@ -152,11 +185,26 @@ const LogWorkout = () => {
     }
   };
 
+  const handleAddSet = () => {
+    append({ reps: undefined, weight: undefined });
+  };
+
+  const handleRemoveSet = (index: number) => {
+    if (fields.length === 1) {
+      // If it's the last set, replace it with an empty one instead of removing
+      remove(0);
+      append({ reps: undefined, weight: undefined });
+    } else {
+      remove(index);
+    }
+  };
+
   return (
     <>
       <Header title="Log Workout">
         <DatePill />
       </Header>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-4 flex grow flex-col gap-4"
@@ -268,17 +316,24 @@ const LogWorkout = () => {
           <hr className="w-full border-slate-200" />
         </div>
 
-        <SetInput index={0} register={register} errors={errors} />
-        <SetInput index={1} register={register} errors={errors} />
-        <SetInput index={2} register={register} errors={errors} />
+{fields.map((field, index) => (
+          <SetInput 
+            key={field.id} 
+            index={index} 
+            register={register} 
+            errors={errors} 
+            onRemove={() => handleRemoveSet(index)}
+            showRemoveButton={true}
+          />
+        ))}
 
-        {/**@todo - dynamic sets */}
-        {/* <button
+<button
           type="button"
-          className="bg-white border border-slate-300 p-2 rounded-md text-slate-500 font-semibold shadow-sm"
+          className="bg-white border border-slate-300 p-2 rounded-md text-slate-500 font-semibold shadow-sm focus:bg-slate-200 active:bg-slate-200"
+          onClick={handleAddSet}
         >
           Add set
-        </button> */}
+        </button>
 
         <button
           className="mt-2 rounded bg-slate-700 p-4 text-center text-base font-bold text-white"

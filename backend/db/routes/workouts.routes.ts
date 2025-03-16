@@ -21,7 +21,7 @@ router.post('/', async (req: Request<{}, {}, CreateWorkoutRequest>, res) => {
   await db.transaction(async (tx) => {
     /**
      * This is a transaction because a new workout
-     * will update the "workouts"table first and then the "sets" table.
+     * will update the "workouts" table first and then the "sets" table.
      *
      * If an error occurs in this transaction, the workout will be rolled back
      */
