@@ -7,7 +7,7 @@ import workoutsRouter from '../db/routes/workouts.routes';
 
 const app = express();
 const PORT = 8008;
-const IP = '192.168.1.6';
+const IP = '192.168.1.7';
 
 app.use(express.json());
 app.use(cors());

@@ -1,4 +1,4 @@
-export type ExerciseTypes = 'Cardio' | 'Strength';
+export type ExerciseTypes = 'cardio' | 'strength';
 
 export type Exercise = {
   id: number;

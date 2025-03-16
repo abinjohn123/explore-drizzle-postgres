@@ -60,16 +60,16 @@ const ExerciseItem: React.FC<{
       </span>
       <span
         className={clsx(
-          'rounded-md border border-solid px-2 py-1 text-xs font-medium',
+          'rounded-md border border-solid px-2 py-1 text-xs font-medium capitalize',
           {
             'border-green-200 bg-green-100 text-green-600':
-              exercise.type === 'Cardio',
+              exercise.type === 'cardio',
             'border-red-200 bg-red-100 text-red-600':
-              exercise.type === 'Strength',
+              exercise.type === 'strength',
           },
         )}
       >
-        {exercise.type === 'Strength' ? 'strength' : 'cardio'}
+        {exercise.type === 'strength' ? 'strength' : 'cardio'}
       </span>
     </li>
   );

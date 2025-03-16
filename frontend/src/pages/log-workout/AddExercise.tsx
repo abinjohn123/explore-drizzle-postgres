@@ -144,8 +144,8 @@ const AddExercise: React.FC<Props> = ({
                 />
               </SelectTrigger>
               <SelectContent className="w-full text-slate-500 outline-none">
-                <SelectItem value="Strength">Strength</SelectItem>
-                <SelectItem value="Cardio">Cardio</SelectItem>
+                <SelectItem value="strength">Strength</SelectItem>
+                <SelectItem value="cardio">Cardio</SelectItem>
               </SelectContent>
             </Select>
           )}
