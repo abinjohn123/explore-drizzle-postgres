@@ -53,12 +53,12 @@ const NoExercisesAdded = () => (
   </div>
 );
 
-const SetInput: React.FC<SetInputProps> = ({ 
-  index, 
-  register, 
-  errors, 
+const SetInput: React.FC<SetInputProps> = ({
+  index,
+  register,
+  errors,
   onRemove,
-  showRemoveButton
+  showRemoveButton,
 }) => {
   return (
     <fieldset className="flex items-center justify-between gap-2">
@@ -99,12 +99,12 @@ const SetInput: React.FC<SetInputProps> = ({
       </label>
 
       {showRemoveButton && (
-        <button 
-          type="button" 
-          className="mt-4 leading-none active:bg-slate-300 p-1.5 rounded-full flex items-center justify-center"
+        <button
+          type="button"
+          className="mt-4 flex items-center justify-center rounded-full p-1.5 leading-none active:bg-slate-300"
           onClick={onRemove}
         >
-          <span className="material-symbols-rounded leading-none text-xl text-slate-500">
+          <span className="material-symbols-rounded text-xl leading-none text-slate-500">
             delete
           </span>
         </button>
@@ -127,18 +127,18 @@ const LogWorkout = () => {
         { reps: undefined, weight: undefined },
         { reps: undefined, weight: undefined },
         { reps: undefined, weight: undefined },
-      ]
-    }
+      ],
+    },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "sets"
+    name: 'sets',
   });
 
-
-  const { data, isLoading, mutate } =
-    useCustomSWR<Exercise[]>(`/users/${TEST_USER_ID}/exercises`);
+  const { data, isLoading, mutate } = useCustomSWR<Exercise[]>(
+    `/users/${TEST_USER_ID}/exercises`,
+  );
   const { toast } = useToast();
 
   const [exercise, setExercise] = useState<Exercise | null>(null);
@@ -316,20 +316,20 @@ const LogWorkout = () => {
           <hr className="w-full border-slate-200" />
         </div>
 
-{fields.map((field, index) => (
-          <SetInput 
-            key={field.id} 
-            index={index} 
-            register={register} 
-            errors={errors} 
+        {fields.map((field, index) => (
+          <SetInput
+            key={field.id}
+            index={index}
+            register={register}
+            errors={errors}
             onRemove={() => handleRemoveSet(index)}
             showRemoveButton={true}
           />
         ))}
 
-<button
+        <button
           type="button"
-          className="bg-white border border-slate-300 p-2 rounded-md text-slate-500 font-semibold shadow-sm focus:bg-slate-200 active:bg-slate-200"
+          className="rounded-md border border-slate-300 bg-white p-2 font-semibold text-slate-500 shadow-sm focus:bg-slate-200 active:bg-slate-200"
           onClick={handleAddSet}
         >
           Add set
