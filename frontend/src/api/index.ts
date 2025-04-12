@@ -1,7 +1,9 @@
 import useSWR from 'swr';
 import { CustomError } from '@/types';
 
-const BASE_URL = 'http://192.168.1.7:8008';
+import { LOCAL_IP } from '../../../local.config';
+
+const BASE_URL = `http://${LOCAL_IP}:8008`;
 
 export const customFetch = async <T>(...args: Parameters<typeof fetch>) => {
   const [route, rest] = args;

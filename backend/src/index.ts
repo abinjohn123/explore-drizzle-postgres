@@ -5,9 +5,10 @@ import usersRouter from '../db/routes/users.routes';
 import exercisesRouter from '../db/routes/exercises.routes';
 import workoutsRouter from '../db/routes/workouts.routes';
 
+import { LOCAL_IP } from '../../local.config';
+
 const app = express();
 const PORT = 8008;
-const IP = '192.168.1.7';
 
 app.use(express.json());
 app.use(cors());
@@ -20,4 +21,6 @@ app.get('/', (_, res) => {
   res.send('Try /users');
 });
 
-app.listen(PORT, IP, () => console.log('App has started on', `${IP}:${PORT}`));
+app.listen(PORT, LOCAL_IP, () =>
+  console.log('App has started on', `${LOCAL_IP}:${PORT}`),
+);
