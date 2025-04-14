@@ -87,6 +87,7 @@ const SetInput: React.FC<SetInputProps> = ({
         </span>
         <input
           type="number"
+          step="0.1"
           min={0}
           className={clsx(
             'w-full rounded-md border p-2  text-base font-normal text-slate-600',
