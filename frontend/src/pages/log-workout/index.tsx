@@ -23,6 +23,7 @@ import AddExercise from './AddExercise';
 import { TEST_USER_ID } from '@/main';
 import { useToast } from '@/components/ui/use-toast';
 import DatePill from '@/components/DatePill';
+import { NoDataFullScreen } from '@/components/NoData';
 
 type FormFields = {
   exercise_id: number;
@@ -39,19 +40,6 @@ interface SetInputProps {
   onRemove: () => void;
   showRemoveButton: boolean;
 }
-
-const NoExercisesAdded = () => (
-  <div className="flex w-full flex-col gap-2 py-4 text-center">
-    <span className="material-symbols-rounded text-2xl leading-none text-slate-500">
-      list_alt_add
-    </span>
-    <span className="text-sm text-slate-500">
-      No exercises added yet.
-      <br />
-      Tap here to add your first one.
-    </span>
-  </div>
-);
 
 const SetInput: React.FC<SetInputProps> = ({
   index,
@@ -272,7 +260,13 @@ const LogWorkout = () => {
                       className="flex w-[--input-width] flex-col gap-1 rounded border border-slate-200 bg-white p-2 shadow-md"
                     >
                       {data && data.length === 0 && !query && (
-                        <NoExercisesAdded />
+                        <NoDataFullScreen icon="list_alt_add">
+                          <span className="text-sm text-slate-500">
+                            No exercises added yet.
+                            <br />
+                            Tap here to add your first one.
+                          </span>
+                        </NoDataFullScreen>
                       )}
 
                       {filteredList.map((exercise) => (

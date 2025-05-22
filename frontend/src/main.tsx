@@ -11,6 +11,8 @@ import App from './App.tsx';
 import GlobalError from './components/GlobalError.tsx';
 import { ROUTES } from './routes/index.ts';
 import Exercises from './pages/exercises/index.tsx';
+import SingleExercise from './pages/exercises/SingleExercise.tsx';
+import ExercisesList from './pages/exercises/ExercisesList.tsx';
 
 export const TEST_USER_ID = 4;
 
@@ -30,6 +32,16 @@ const router = createBrowserRouter([
       {
         path: ROUTES.EXERCISES,
         element: <Exercises />,
+        children: [
+          {
+            index: true,
+            element: <ExercisesList />,
+          },
+          {
+            path: ':exerciseId',
+            element: <SingleExercise />,
+          },
+        ],
       },
     ],
     errorElement: <GlobalError />,

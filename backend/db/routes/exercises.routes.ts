@@ -1,5 +1,5 @@
 import express from 'express';
-import { and, asc, desc, eq, getTableColumns, gt } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 
 import { db } from '../index';
 import * as schema from '../schema';
@@ -100,11 +100,12 @@ router.delete('/:id/sets/:setId', async (req, res) => {
 // View single exercise
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const { workout_id, ...setsCols } = getTableColumns(schema.sets);
 
   const idNum = Number.parseInt(id, 10);
-  const today = new Date();
-  const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
+
+  const exercisesSchema = schema.exercises;
+  const workoutsSchema = schema.workouts;
+  const setsSchema = schema.sets;
 
   if (isNaN(idNum)) {
     res.status(400).send('id must be a number');
@@ -113,29 +114,49 @@ router.get('/:id', async (req, res) => {
 
   try {
     const [exercise] = await db
-      .select()
-      .from(schema.exercises)
-      .where(eq(schema.exercises.id, idNum));
+      .select({
+        id: exercisesSchema.id,
+        name: exercisesSchema.name,
+        type: exercisesSchema.type,
+      })
+      .from(exercisesSchema)
+      .where(eq(exercisesSchema.id, idNum));
 
     if (!exercise) {
       res.status(404).send('Exercise not found');
       return;
     }
 
-    const sets = await db
-      .select(setsCols)
-      .from(schema.sets)
-      .where(
-        and(
-          eq(schema.sets.workout_id, idNum),
-          gt(schema.sets.created_at, thirtyDaysAgo)
-        )
-      )
-      .orderBy(desc(schema.sets.created_at));
+    const workouts = await db
+      .select({
+        workout_id: workoutsSchema.workout_id,
+        created_at: workoutsSchema.created_at,
+      })
+      .from(workoutsSchema)
+      .where(and(eq(workoutsSchema.exercise_id, idNum)))
+      .orderBy(desc(workoutsSchema.created_at));
+
+    const workoutWithSets = await Promise.all(
+      workouts.map(async (workout) => {
+        const sets = await db
+          .select({
+            reps: setsSchema.reps,
+            weight: setsSchema.weight,
+          })
+          .from(setsSchema)
+          .where(and(eq(setsSchema.workout_id, workout.workout_id)))
+          .orderBy(desc(setsSchema.created_at));
+
+        return {
+          ...workout,
+          sets,
+        };
+      }),
+    );
 
     const exerciseDetails = {
       ...exercise,
-      sets,
+      workouts: workoutWithSets,
     };
     return res.status(200).send(exerciseDetails);
   } catch (err) {

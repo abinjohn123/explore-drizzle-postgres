@@ -23,6 +23,13 @@ export type Set = {
   weight: number;
 };
 
-export type ExerciseDetails = Exercise & {
-  sets: Set[];
+// Exercise Details
+export type ExerciseResponse = Pick<Exercise, 'id' | 'name' | 'type'>;
+export type WorkoutResponse = Pick<Workout, 'workout_id' | 'created_at'>;
+export type SetResponse = Pick<Set, 'reps' | 'weight'>;
+export type WorkoutWithSets = WorkoutResponse & {
+  sets: SetResponse[];
+};
+export type ExerciseDetails = ExerciseResponse & {
+  workouts: WorkoutWithSets[];
 };
