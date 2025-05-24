@@ -24,6 +24,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  submitting: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -39,29 +40,44 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   // Sign out
   const signOut = useCallback(async (): Promise<void> => {
-    await supabase.auth.signOut();
-    setSession(null);
-    setUser(null);
+    setSubmitting(true);
+
+    try {
+      await supabase.auth.signOut();
+      setSession(null);
+      setUser(null);
+    } catch (error) {
+      throw error;
+    } finally {
+      setSubmitting(false);
+    }
   }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    try {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setLoading(false);
-    });
+      // listen for changes to auth state
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session);
+      });
 
-    return () => subscription.unsubscribe();
+      return () => subscription.unsubscribe();
+    } catch (error) {
+      console.error('Auth state error:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const value = useMemo(
@@ -70,9 +86,10 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
       user,
       session,
       loading,
+      submitting,
       signOut,
     }),
-    [user, session, loading, signOut],
+    [user, session, loading, submitting, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
