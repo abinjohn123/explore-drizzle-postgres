@@ -5,7 +5,6 @@ import useCustomSWR from '@/api';
 import { Exercise } from '@/types';
 import AddExercise from '../log-workout/AddExercise';
 import { useNavigate } from 'react-router-dom';
-import { TEST_USER_ID } from '@/main';
 
 const NoExercisesAdded: React.FC<{ handleClick: () => void }> = ({
   handleClick,
@@ -86,7 +85,7 @@ const ExerciseItem: React.FC<{
 
 const ExercisesList: React.FC = () => {
   const { data, mutate, isLoading } = useCustomSWR<Exercise[]>(
-    `/users/${TEST_USER_ID}/exercises`,
+    '/users/me/exercises',
   );
 
   const [openAddExerciseDrawer, setOpenAddExerciseDrawer] = useState(false);

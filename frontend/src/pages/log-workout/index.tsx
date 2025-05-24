@@ -20,7 +20,6 @@ import Header from '@/components/Header';
 import { Exercise } from '@/types';
 import useCustomSWR, { customFetch } from '../../api';
 import AddExercise from './AddExercise';
-import { TEST_USER_ID } from '@/main';
 import { useToast } from '@/components/ui/use-toast';
 import DatePill from '@/components/DatePill';
 import { NoDataFullScreen } from '@/components/NoData';
@@ -126,7 +125,7 @@ const LogWorkout = () => {
   });
 
   const { data, isLoading, mutate } = useCustomSWR<Exercise[]>(
-    `/users/${TEST_USER_ID}/exercises`,
+    '/users/me/exercises',
   );
   const { toast } = useToast();
 
@@ -144,15 +143,10 @@ const LogWorkout = () => {
   );
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const formData = {
-      ...data,
-      created_by: TEST_USER_ID,
-    };
-
     try {
       await customFetch<{ id: string }>('/workouts', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
       toast({

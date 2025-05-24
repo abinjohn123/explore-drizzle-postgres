@@ -19,7 +19,6 @@ import {
 
 import { Exercise, ExerciseTypes } from '@/types';
 import { customFetch } from '@/api';
-import { TEST_USER_ID } from '@/main';
 import { useToast } from '@/components/ui/use-toast';
 
 interface Props {
@@ -50,15 +49,10 @@ const AddExercise: React.FC<Props> = ({
   } = useForm<FormFields>();
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const formData = {
-      ...data,
-      created_by: TEST_USER_ID,
-    };
-
     try {
       const response = await customFetch<Exercise[]>('/exercises', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
       toast({
