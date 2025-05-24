@@ -1,6 +1,7 @@
 import { useAuthContext } from './AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/routes';
+import { REDIRECT_PATH_SESSION_KEY } from '@/constants';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,6 +9,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { session, loading } = useAuthContext();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -18,7 +20,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!session) {
-    console.log('redirecting');
+    const intendedPath = location.pathname + location.search;
+    sessionStorage.setItem(REDIRECT_PATH_SESSION_KEY, intendedPath);
 
     return <Navigate to={ROUTES.AUTH} replace />;
   }
