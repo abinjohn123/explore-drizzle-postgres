@@ -5,9 +5,7 @@ import usersRouter from '../db/routes/users.routes';
 import exercisesRouter from '../db/routes/exercises.routes';
 import workoutsRouter from '../db/routes/workouts.routes';
 
-// Dynamic configuration for local vs production
 const isDevelopment = process.env.NODE_ENV !== 'production';
-const PORT = Number(process.env.PORT) || 8008;
 
 // Import LOCAL_IP only in development
 let LOCAL_IP: string = 'localhost';
@@ -20,9 +18,9 @@ if (isDevelopment) {
   }
 }
 
-const HOST = isDevelopment ? LOCAL_IP : '0.0.0.0';
-
 const app = express();
+const PORT = Number(process.env.PORT) || 8008;
+const HOST = isDevelopment ? LOCAL_IP : '0.0.0.0';
 
 // CORS configuration
 const corsOptions = {
