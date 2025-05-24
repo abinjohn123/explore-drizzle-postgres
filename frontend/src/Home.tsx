@@ -1,27 +1,3 @@
-import {
-  ResponsiveContainer,
-  LineChart,
-  YAxis,
-  Line,
-  XAxis,
-  Tooltip,
-  AreaChart,
-  Area,
-} from 'recharts';
-import {
-  Button,
-  Calendar,
-  CalendarCell,
-  CalendarGrid,
-  CalendarGridHeader,
-  CalendarHeaderCell,
-  CalendarGridBody,
-  Heading,
-} from 'react-aria-components';
-import clsx from 'clsx';
-
-import useCustomSWR from './api';
-import { Exercise } from './types';
 import Header from './components/Header';
 import { getGreeting } from './utils';
 import DatePill from './components/DatePill';

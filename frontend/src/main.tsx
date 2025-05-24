@@ -13,17 +13,39 @@ import { ROUTES } from './routes/index.ts';
 import Exercises from './pages/exercises/index.tsx';
 import SingleExercise from './pages/exercises/SingleExercise.tsx';
 import ExercisesList from './pages/exercises/ExercisesList.tsx';
+import { PublicRoute, Auth, ProtectedRoute, AuthContextProvider } from '@/auth';
+import Profile from './pages/profile/index.tsx';
 
 export const TEST_USER_ID = 4;
 
 const router = createBrowserRouter([
+  // public routes
+  {
+    path: ROUTES.AUTH,
+    element: (
+      <PublicRoute>
+        <Auth />
+      </PublicRoute>
+    ),
+    errorElement: <GlobalError />,
+  },
+
+  // protected routes
   {
     path: ROUTES.HOME,
-    element: <App />,
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: ROUTES.HOME,
         element: <Home />,
+      },
+      {
+        path: ROUTES.PROFILE,
+        element: <Profile />,
       },
       {
         path: ROUTES.NEW_WORKOUT,
@@ -50,9 +72,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <>
+    <AuthContextProvider>
       <RouterProvider router={router} />
       <Toaster />
-    </>
+    </AuthContextProvider>
   </React.StrictMode>,
 );
