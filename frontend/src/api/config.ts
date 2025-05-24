@@ -1,13 +1,13 @@
-import { LOCAL_IP } from '../../../local.config';
-
-// Environment detection
 const isDevelopment = import.meta.env.DEV;
+
+const LOCAL_IP = import.meta.env.VITE_LOCAL_IP;
+const LOCAL_PORT = import.meta.env.VITE_API_PORT;
 
 // API Configuration
 export const API_CONFIG = {
-  DEVELOPMENT_URL: `http://${LOCAL_IP}:8008`,
+  DEVELOPMENT_URL: `http://${LOCAL_IP}:${LOCAL_PORT}`,
 
-  PRODUCTION_URL: import.meta.env.API_URL,
+  PRODUCTION_URL: import.meta.env.VITE_API_URL,
 
   // Current base URL based on environment
   get BASE_URL() {
