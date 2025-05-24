@@ -16,8 +16,6 @@ import ExercisesList from './pages/exercises/ExercisesList.tsx';
 import { PublicRoute, Auth, ProtectedRoute, AuthContextProvider } from '@/auth';
 import Profile from './pages/profile/index.tsx';
 
-export const TEST_USER_ID = 4;
-
 const router = createBrowserRouter([
   // public routes
   {

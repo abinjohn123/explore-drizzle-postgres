@@ -7,17 +7,8 @@ import {
   useMemo,
   useCallback,
 } from 'react';
-import {
-  createClient,
-  Session,
-  SupabaseClient,
-  User,
-} from '@supabase/supabase-js';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_PROJECT,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
+import { Session, SupabaseClient, User } from '@supabase/supabase-js';
+import { supabaseClient } from './lib';
 
 interface AuthContextType {
   client: SupabaseClient;
@@ -47,7 +38,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
     setSubmitting(true);
 
     try {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       setSession(null);
       setUser(null);
     } catch (error) {
@@ -59,7 +50,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
 
   useEffect(() => {
     try {
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      supabaseClient.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -68,7 +59,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
       // listen for changes to auth state
       const {
         data: { subscription },
-      } = supabase.auth.onAuthStateChange((_event, session) => {
+      } = supabaseClient.auth.onAuthStateChange((_event, session) => {
         setSession(session);
       });
 
@@ -82,7 +73,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({
 
   const value = useMemo(
     () => ({
-      client: supabase,
+      client: supabaseClient,
       user,
       session,
       loading,
