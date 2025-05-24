@@ -2,49 +2,23 @@ import { create } from 'domain';
 import { Relation, relations } from 'drizzle-orm';
 import {
   integer,
+  uuid,
   pgEnum,
   pgTable,
   serial,
-  uniqueIndex,
   varchar,
   timestamp,
   foreignKey,
 } from 'drizzle-orm/pg-core';
 
-/*
-// declaring enum in database
-export const popularityEnum = pgEnum('popularity', [
-  'unknown',
-  'known',
-  'popular',
+export const exerciseTypeEnum = pgEnum('exercise_type', ['cardio', 'strength']);
+export const exerciseVisibilityEnum = pgEnum('exercise_visibility', [
+  'public',
+  'private',
 ]);
 
-export const countries = pgTable(
-  'countries',
-  {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 256 }),
-  },
-  (countries) => {
-    return {
-      nameIndex: uniqueIndex('name_idx').on(countries.name),
-    };
-  }
-);
-
-export const cities = pgTable('cities', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 256 }),
-  countryId: integer('country_id').references(() => countries.id),
-  popularity: popularityEnum('popularity'),
-});
-
-*/
-
-export const exerciseTypeEnum = pgEnum('exercise_type', ['cardio', 'strength']);
-
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  authId: uuid('auth_id').primaryKey(),
   created_at: timestamp('created_at'),
   username: varchar('username', { length: 256 }),
 });
@@ -52,15 +26,16 @@ export const users = pgTable('users', {
 export const exercises = pgTable('exercises', {
   id: serial('id').primaryKey(),
   created_at: timestamp('created_at'),
-  created_by: integer('created_by').references(() => users.id),
+  created_by: uuid('created_by').references(() => users.authId),
   name: varchar('name', { length: 256 }),
   type: exerciseTypeEnum('type'),
+  visibility: exerciseVisibilityEnum('visibility').default('private'),
 });
 
 export const workouts = pgTable('workouts', {
   workout_id: serial('workout_id').primaryKey(),
   created_at: timestamp('created_at'),
-  created_by: integer('created_by').references(() => users.id),
+  created_by: uuid('created_by').references(() => users.authId),
   exercise_id: integer('exercise_id').references(() => exercises.id),
 });
 
