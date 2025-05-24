@@ -7,9 +7,9 @@ const AuthPage: React.FC = () => {
   const { client } = useAuthContext();
 
   return (
-    <div className="mx-auto w-full max-w-sm">
-      <div className="mb-6 text-center">
-        <h1 className="mb-2 text-2xl font-bold text-gray-900">Welcome</h1>
+    <div className="mx-auto flex h-svh max-w-md flex-col justify-center gap-6 bg-slate-50 p-4">
+      <div className="flex flex-col gap-2 text-center">
+        <h1 className="text-2xl font-bold text-gray-900">Welcome</h1>
         <p className="text-gray-600">
           Sign in to your account or create a new one
         </p>
