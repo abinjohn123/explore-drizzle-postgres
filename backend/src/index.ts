@@ -1,9 +1,12 @@
-import express, { Request } from 'express';
+import express from 'express';
+import { config } from 'dotenv';
 import cors from 'cors';
 
 import usersRouter from '../db/routes/users.routes';
 import exercisesRouter from '../db/routes/exercises.routes';
 import workoutsRouter from '../db/routes/workouts.routes';
+
+config({ path: '.env' });
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -26,10 +29,7 @@ const HOST = isDevelopment ? LOCAL_IP : '0.0.0.0';
 const corsOptions = {
   origin: isDevelopment
     ? [`http://${LOCAL_IP}:3001`]
-    : [
-        process.env.FRONTEND_URL ?? '',
-        'https://your-frontend-domain.vercel.app',
-      ].filter(Boolean), // Remove undefined values
+    : [process.env.FRONTEND_URL ?? ''].filter(Boolean), // Remove emtpy values
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
