@@ -28,7 +28,7 @@ const corsOptions = {
     ? [`http://${LOCAL_IP}:3001`]
     : [
         process.env.FRONTEND_URL ?? '',
-        `http://${LOCAL_IP}:4173`, // local build preview mode
+        'https://your-frontend-domain.vercel.app',
       ].filter(Boolean), // Remove undefined values
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
