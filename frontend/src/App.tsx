@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AppNav from './components/AppNav';
 import { useAuthContext } from './auth';
 import { useEffect } from 'react';
@@ -8,6 +8,12 @@ import { REDIRECT_PATH_SESSION_KEY } from './constants';
 const App: React.FC = () => {
   const { session } = useAuthContext();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  console.log('🚀 App component rendered');
+  console.log('📍 Current location:', location.pathname);
+  console.log('🔗 Location object:', location);
 
   // Handle post-login redirect
   useEffect(() => {
