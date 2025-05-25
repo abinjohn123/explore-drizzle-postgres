@@ -1,6 +1,6 @@
-import express from 'express';
+import express, { Request } from 'express';
 import { config } from 'dotenv';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 
 import usersRouter from '../db/routes/users.routes';
 import exercisesRouter from '../db/routes/exercises.routes';
@@ -25,18 +25,30 @@ const app = express();
 const PORT = Number(process.env.PORT) || 8008;
 const HOST = isDevelopment ? LOCAL_IP : '0.0.0.0';
 
+const allowedOrigins = isDevelopment
+  ? [`http://${LOCAL_IP}:3001`]
+  : [process.env.FRONTEND_URL ?? ''].filter(Boolean);
+
 // CORS configuration
-const corsOptions = {
-  origin: isDevelopment
-    ? [`http://${LOCAL_IP}:3001`]
-    : [process.env.FRONTEND_URL ?? ''].filter(Boolean), // Remove emtpy values
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 };
 
-app.use(express.json());
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // preflight requests
+app.use(express.json());
 
 // Health check endpoint (useful for Railway)
 app.get('/health', (_, res) => {
