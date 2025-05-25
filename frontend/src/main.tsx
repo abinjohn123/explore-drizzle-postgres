@@ -8,7 +8,7 @@ import Home from './Home.tsx';
 import './index.css';
 import LogWorkout from './pages/log-workout/index.tsx';
 import App from './App.tsx';
-import GlobalError from './components/GlobalError.tsx';
+// import GlobalError from './components/GlobalError.tsx';
 import { ROUTES } from './routes/index.ts';
 import Exercises from './pages/exercises/index.tsx';
 import SingleExercise from './pages/exercises/SingleExercise.tsx';
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         <Auth />
       </PublicRoute>
     ),
-    errorElement: <GlobalError />,
+    // errorElement: <GlobalError />,
   },
 
   // protected routes
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
         ],
       },
     ],
-    errorElement: <GlobalError />,
+    // errorElement: <GlobalError />,
   },
 ]);
 
